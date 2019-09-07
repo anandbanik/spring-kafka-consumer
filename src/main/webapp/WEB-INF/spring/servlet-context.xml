@@ -1,0 +1,92 @@
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<resources mapping="/resources/**" location="/resources/" />
+	<context:component-scan base-package="gbs.finance.blockchain.oms	" />
+
+	<beans:bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>classpath:application.properties</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<beans:property name="ignoreResourceNotFound" value="true" />
+		<beans:property name="ignoreUnresolvablePlaceholders"
+			value="true" />
+	</beans:bean>
+
+<!-- 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName" value="${jdbc_driverClassName}" />
+		<beans:property name="url" value="${jdbc_url}" />
+		<beans:property name="username" value="${jdbc_username}" />
+		<beans:property name="password" value="${jdbc_password}" />
+		<beans:property name="initialSize" value="5" />
+		<beans:property name="maxTotal" value="100" />
+		<beans:property name="maxIdle" value="60" />
+		<beans:property name="minIdle" value="10" />
+		<beans:property name="validationQuery" value="SELECT 1 FROM DUAL;" />
+
+	</beans:bean> -->
+	
+	<beans:bean id="kafkaBean" class="gbs.finance.blockchain.oms.util.KafkaConfig">
+		<beans:property name="bindAddress" value="${kafka_bind_address}"/>
+		<beans:property name="groupId" value="${kafka_group_id}"/>
+		<beans:property name="enableAutoCommit" value="${kafka_enable_auto_commit}"/>
+		<beans:property name="createPoTopic" value="${create_po_topic}"/>
+		<beans:property name="editPoTopic" value="${edit_po_topic}"/>
+		<beans:property name="offsetConfig" value="${kafka_offset_config}"/>
+	</beans:bean>
+
+	<context:property-placeholder />
+
+	<!-- Hibernate SessionFactory Bean definition -->
+	<!-- <beans:bean id="hibernateAnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<beans:property name="dataSource" ref="dataSource" />
+		<beans:property name="annotatedClasses">
+			<beans:list>
+				<beans:value>com.walmartlabs.freshflow.model.FreshflowMsgModel
+				</beans:value>
+			</beans:list>
+		</beans:property>
+		<beans:property name="hibernateProperties">
+			<beans:props>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
+				</beans:prop>
+				<beans:prop key="hibernate.show_sql">true</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+	
+	
+	<beans:bean id="FreshFlowMsgDAO"
+		class="com.walmartlabs.freshflow.dao.FreshflowMsgDaoImpl">
+		<beans:property name="sessionFactory"
+			ref="hibernateAnnotatedSessionFactory" />
+	</beans:bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<beans:bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<beans:property name="sessionFactory"
+			ref="hibernateAnnotatedSessionFactory" />
+	</beans:bean> -->
+	
+	
+	
+</beans:beans>
